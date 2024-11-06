@@ -13,7 +13,13 @@ function Navbar({ username, setUsername }) {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">Learning Platform</div>
+      <div className="navbar-brand">Web3 GameCamp</div>
+      <div className="navbar-links">
+        <Link to="/courses" className="nav-link">课程</Link>
+        <Link to="/projects" className="nav-link">项目</Link>
+        <Link to="/resources" className="nav-link">资源</Link>
+        <Link to="/community" className="nav-link">社区</Link>
+      </div>
       <div className="navbar-menu">
         {username ? (
           <>
@@ -23,7 +29,7 @@ function Navbar({ username, setUsername }) {
         ) : (
           <>
             <Link to="/login" className="nav-link">登录</Link>
-            <Link to="/register" className="nav-link">注册</Link>
+            <Link to="/register" className="nav-link register-btn">注册</Link>
           </>
         )}
       </div>
