@@ -1,40 +1,59 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Auth.css';
 
-function Login() {
+function Login({ setUsername }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
       const response = await axios.post('http://localhost:3001/api/login', {
         email,
         password
       });
-      console.log(response.data);
-      // 处理登录成功
+      const { username } = response.data;
+      setUsername(username);
+      localStorage.setItem('username', username);
+      navigate('/');
     } catch (error) {
-      console.error('登录失败:', error);
+      setError(error.response?.data?.error || '登录失败');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="邮箱"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="密码"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">登录</button>
-    </form>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2>登录</h2>
+        {error && <div className="error-message">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="邮箱"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="密码"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="auth-button">登录</button>
+        </form>
+      </div>
+    </div>
   );
 }
 

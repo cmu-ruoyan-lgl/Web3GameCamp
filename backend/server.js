@@ -42,9 +42,29 @@ const User = mongoose.model('User', userSchema);
 app.post('/api/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    
+    // 检查用户名是否已存在
+    const existingUser = await User.findOne({ 
+      $or: [
+        { username: username },
+        { email: email }
+      ]
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ 
+        error: existingUser.username === username ? '用户名已存在' : '邮箱已被注册'
+      });
+    }
+
     const user = new User({ username, email, password });
     await user.save();
-    res.status(201).json({ message: '注册成功' });
+    
+    // 注册成功后返回用户名
+    res.status(201).json({ 
+      message: '注册成功',
+      username: user.username 
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -60,7 +80,11 @@ app.post('/api/login', async (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ error: '密码错误' });
     }
-    res.json({ message: '登录成功' });
+    // 返回用户名
+    res.json({ 
+      message: '登录成功',
+      username: user.username 
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -1,0 +1,46 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f6fa;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+  text-align: center;
+}
+
+.App-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .App-content {
+    padding: 10px;
+  }
+}
+
+/* 全局链接样式 */
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #2980b9;
+}
+
+/* 全局按钮样式 */
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* 全局过渡效果 */
+* {
+  transition: all 0.3s ease;
+} 
