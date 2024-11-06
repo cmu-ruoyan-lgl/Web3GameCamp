@@ -29,4 +29,14 @@ yarn-error.log*
 *.swo
 
 # 操作系统
-.DS_Store 
+.DS_Store
+
+# 后端文件
+backend/deploy.sh
+backend/models/
+backend/routes/
+
+# 前端文件
+frontend/.env.production
+frontend/src/components/Header.css
+frontend/src/services/
