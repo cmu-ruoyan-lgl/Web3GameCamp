@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
 
 const app = express();
 dotenv.config();
@@ -43,50 +44,91 @@ app.post('/api/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    // 检查用户名是否已存在
-    const existingUser = await User.findOne({ 
-      $or: [
-        { username: username },
-        { email: email }
-      ]
-    });
-
-    if (existingUser) {
+    // 检查用户名和邮箱是否存在
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
       return res.status(400).json({ 
-        error: existingUser.username === username ? '用户名已存在' : '邮箱已被注册'
+        error: '用户名已被使用',
+        field: 'username'
       });
     }
 
-    const user = new User({ username, email, password });
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ 
+        error: '邮箱已被注册',
+        field: 'email'
+      });
+    }
+
+    // 生成盐值并对密码进行加密
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // 创建新用户，使用加密后的密码
+    const user = new User({ 
+      username, 
+      email, 
+      password: hashedPassword  // 存储加密后的密码
+    });
+    
     await user.save();
     
-    // 注册成功后返回用户名
     res.status(201).json({ 
+      success: true,
       message: '注册成功',
       username: user.username 
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('注册错误:', error);
+    res.status(400).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 });
 
 app.post('/api/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { identifier, password } = req.body;
+    
+    // 查找用户（通过用户名或邮箱）
+    const user = await User.findOne({
+      $or: [
+        { username: identifier },
+        { email: identifier }
+      ]
+    });
+
     if (!user) {
-      return res.status(404).json({ error: '用户不存在' });
+      return res.status(401).json({
+        success: false,
+        field: 'identifier',
+        error: '用户不存在'
+      });
     }
-    if (user.password !== password) {
-      return res.status(401).json({ error: '密码错误' });
+
+    // 使用 bcrypt.compare 比较密码
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    
+    if (!isValidPassword) {
+      return res.status(401).json({
+        success: false,
+        field: 'password',
+        error: '密码错误'
+      });
     }
-    // 返回用户名
-    res.json({ 
-      message: '登录成功',
-      username: user.username 
+
+    res.json({
+      success: true,
+      username: user.username
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('登录错误:', error);
+    res.status(500).json({
+      success: false,
+      error: '服务器错误'
+    });
   }
 });
 
