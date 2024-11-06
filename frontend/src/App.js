@@ -11,22 +11,27 @@ function App() {
   const [username, setUsername] = useState(localStorage.getItem('username') || '');
 
   const onLogout = () => {
-    // 清除 localStorage 中的令牌
-    localStorage.removeItem('token');
+    try {
+      // 清除 localStorage
+      localStorage.clear(); // 清除所有 localStorage 数据
+      // 或者只清除特定项
+      // localStorage.removeItem('token');
+      // localStorage.removeItem('username');
 
-    // 清除所有 cookies
-    document.cookie.split(";").forEach((c) => {
-      document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    });
+      // 清除 sessionStorage
+      sessionStorage.clear();
 
-    // 清除 session storage
-    sessionStorage.clear();
+      // 更新用户名状态
+      setUsername(null);
 
-    // 更新用户名状态
-    setUsername(null);
-
-    // 返回主界面
-    window.location.href = '/';
+      // 使用 useNavigate 进行导航会更好，但现在先用这个
+      window.location.href = '/';
+    } catch (error) {
+      console.error('退出登录时发生错误:', error);
+      // 即使发生错误，也要确保用户被登出
+      setUsername(null);
+      window.location.href = '/';
+    }
   };
 
   return (
