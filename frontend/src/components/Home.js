@@ -6,7 +6,7 @@ function Home({ username }) {
   return (
     <div className="home-container">
       <section className="hero-section">
-        <h1>欢迎来到 Web3 GameCamp</h1>
+        <h1>欢迎来到 Web3GameCamp</h1>
         <p className="subtitle">探索区块链游戏开发的无限可能</p>
       </section>
 
