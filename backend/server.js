@@ -7,8 +7,12 @@ const bcrypt = require('bcrypt');
 const app = express();
 dotenv.config();
 
-// 中间件
-app.use(cors());
+// CORS配置
+app.use(cors({
+  origin: ['https://www.web3gamecamp.xyz', 'http://localhost:3000'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // 连接数据库
@@ -132,21 +136,14 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3001;
-const server = app.listen(PORT, () => {
-  console.log(`服务器运行在端口 ${PORT}`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`端口 ${PORT} 已被占用，请尝试其他端口`);
-    process.exit(1);
-  } else {
-    console.error('服务器启动错误:', err);
-  }
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 // 优雅关闭服务器
 process.on('SIGTERM', () => {
-  server.close(() => {
+  app.close(() => {
     console.log('服务器正常关闭');
     mongoose.connection.close();
     process.exit(0);
