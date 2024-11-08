@@ -9,11 +9,25 @@ dotenv.config();
 
 // CORS配置
 app.use(cors({
-  origin: ['https://www.web3gamecamp.xyz', 'http://localhost:3000'],
-  credentials: true
+  origin: ['http://localhost:3000', 'https://www.web3gamecamp.xyz'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
+
+// 添加请求日志中间件
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
+// 添加错误处理中间件
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err);
+  res.status(500).json({ error: '服务器错误' });
+});
 
 // 连接数据库
 mongoose.connect(process.env.MONGODB_URI, {
