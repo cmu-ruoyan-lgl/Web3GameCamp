@@ -36,7 +36,7 @@ pm2 save
 
 # 配置Nginx反向代理
 echo "Configuring Nginx..."
-cat > /www/server/nginx/conf/web3gamecamp.conf << EOF
+cat > /www/server/nginx/conf/vhost/web3gamecamp.conf << EOF
 # 前端配置
 server {
     listen 80;
