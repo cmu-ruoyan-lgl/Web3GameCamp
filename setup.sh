@@ -1,3 +1,3 @@
-mkdir learning-platform
-cd learning-platform
+mkdir web3gamecamp
+cd web3gamecamp
 mkdir frontend backend 
