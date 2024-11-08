@@ -1,0 +1,11 @@
+{
+  "name": "web3gamecamp",
+  "version": "1.0.0",
+  "description": "Web3 Game Camp Platform",
+  "scripts": {
+    "install-all": "cd frontend && npm install && cd ../backend && npm install",
+    "build-frontend": "cd frontend && npm run build",
+    "start-backend": "cd backend && npm start",
+    "deploy": "bash setup.sh"
+  }
+} 
