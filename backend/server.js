@@ -9,7 +9,7 @@ dotenv.config();
 
 // CORS配置
 app.use(cors({
-  origin: ['http://114.55.116.250:80', 'https://www.web3gamecamp.xyz'],
+  origin: ['http://114.55.116.250:80','http://114.55.116.250:3001','http://114.55.116.250', 'https://www.web3gamecamp.xyz'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
