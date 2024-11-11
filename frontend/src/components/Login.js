@@ -30,7 +30,7 @@ function Login({ setUsername }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(publicdata + ':3001/api/login', {
+      const response = await axios.post(publicdata.API_URL + ':3001/api/login', {
         identifier: formData.identifier,
         password: formData.password
       });
