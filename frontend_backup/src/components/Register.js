@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import './Auth.css';
+import publicdata from '../../../frontend/src/components/publicdata';
 
 function Register({ setUsername }) {
   const [formData, setFormData] = useState({
@@ -57,7 +58,7 @@ function Register({ setUsername }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/api/register', {
+      const response = await axios.post(publicdata + ':3001/api/register', {
         username: formData.username,
         email: formData.email,
         password: formData.password

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import './Auth.css';
+import publicdata from './publicdata';
 
 function Login({ setUsername }) {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ function Login({ setUsername }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/api/login', {
+      const response = await axios.post(publicdata + ':3001/api/login', {
         identifier: formData.identifier,
         password: formData.password
       });

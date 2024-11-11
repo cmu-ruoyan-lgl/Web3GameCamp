@@ -9,7 +9,7 @@ dotenv.config();
 
 // CORS配置
 app.use(cors({
-  origin: ['http://localhost:80', 'https://www.web3gamecamp.xyz'],
+  origin: ['http://114.55.116.250:80', 'https://www.web3gamecamp.xyz'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -153,7 +153,8 @@ app.post('/api/login', async (req, res) => {
 app.get('/api/ping', async(req,res) => {
   res.json({
     success: true,
-    message: 'pong'
+    message: 'pong',
+    PORT: process.env.PORT || 5000
   })
 })
 
